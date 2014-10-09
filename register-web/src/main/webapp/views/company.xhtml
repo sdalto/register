@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<style type="text/css">
+.ui-panelgrid td, .ui-panelgrid tr {
+	border-style: none !important
+}
+
+.label {
+	left: 300px;
+	position: relative;
+	top: -60px;
+}
+
+.clear_button {
+	right: 5px;
+	top: 50px;
+}
+
+.ui-panel-titlebar {
+	/* 	height: 65px; */
+	
+}
+</style>
+
+<h:head>
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{request.contextPath}/resources/images/favicon.ico" />
+</h:head>
+
+<h:body>
+	<p:panel id="basic" style="margin-bottom:20px">
+		<f:facet name="header">
+			<ui:include src="header.xhtml" height="160" />
+		</f:facet>
+		<h:form id="form" enctype="multipart/form-data">
+			<p:growl id="msgs" showDetail="true" />
+			<p:inputText id="input_company"
+				value="#{companyController.newCompanyName}"
+				label="Nombre">
+				<!--                 <f:validateLength minimum="2" /> -->
+			</p:inputText>
+			<p:commandButton value="Agregar" id="ajax" update="form"
+				actionListener="#{companyController.add}" icon="ui-icon-check">
+			</p:commandButton>
+			<p:commandButton value="Eliminar" id="button_delete" update="form"
+				actionListener="#{companyController.delete}" icon="ui-icon-check">
+			</p:commandButton>
+			<p:panelGrid id="panel" columns="1">
+				<p:dataTable id="table_companies" var="company"
+					value="#{companyController.companies}" editable="true"
+					style="width:300px;margin-bottom:20px"
+					emptyMessage="Aun no se han cragado datos"
+					selection="#{companyController.selectedCompany}" rowKey="#{company.name}">
+
+					<p:ajax event="rowEdit" listener="#{companyController.onRowEdit}"
+						update=":form:msgs" />
+					<p:ajax event="rowEditCancel"
+						listener="#{companyController.onRowCancel}" update=":form:msgs" />
+					<p:column selectionMode="single" style="width:16px;text-align:center"/>
+					<p:column headerText="Concepto" style="width:300px;display: none;">
+						<h:outputText value="#{company.id}" />
+					</p:column>
+					<p:column headerText="Empresas">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{company.name}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="modelInput" value="#{company.name}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column style="width:32px">
+						<p:rowEditor />
+					</p:column>
+				</p:dataTable>
+			</p:panelGrid>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+				<p:commandButton value="Yes" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+	</p:panel>
+</h:body>
+</html>

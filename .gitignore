@@ -1,0 +1,16 @@
+.project
+*.project
+.classpath
+*.classpath
+.settings/
+*.settings/
+*.settings/*
+*environment.properties
+*target/
+target/*
+*target/*
+*bin
+/.metadata/
+.directory
+.idea/
+*.iml

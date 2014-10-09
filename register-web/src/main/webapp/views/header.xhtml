@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+<style type="text/css">
+img {
+/* 	margin-top: -20px; */
+/* 	top: 1px; */
+}
+</style>
+
+<h:head></h:head>
+
+<h:body>
+	<h:form id="header_form" enctype="multipart/form-data">
+		<h:graphicImage value="/resources/images/logo_completo_trans.png"
+			height="60" />
+		<p:themeSwitcher id="basic" style="float:right;width:165px">
+			<f:selectItem itemLabel="Choose Theme" itemValue="" />
+			<f:selectItems value="#{headerController.themes}" />
+		</p:themeSwitcher>
+		<!--      	<p:separator /> -->
+	</h:form>
+</h:body>
+</html>

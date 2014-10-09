@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<script type="text/javascript">
+	function start() {
+		PF('statusDialog').show();
+	}
+
+	function stop() {
+		PF('statusDialog').hide();
+	}
+</script>
+
+<style type="text/css">
+.ui-panelgrid td, .ui-panelgrid tr {
+	border-style: none !important
+}
+
+.label {
+	left: 300px;
+	position: relative;
+	top: -60px;
+}
+
+.clear_button {
+	right: 5px;
+	top: 50px;
+}
+
+.ui-panel-titlebar {
+	/* 	height: 65px; */
+	
+}
+</style>
+
+<h:head>
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{request.contextPath}/resources/images/favicon.ico" />
+</h:head>
+
+<h:body>
+	<p:panel id="basic" style="margin-bottom:20px">
+		<f:facet name="header">
+			<ui:include src="header.xhtml" height="160" />
+		</f:facet>
+		<h:form id="form" enctype="multipart/form-data">
+			<p:growl id="growl" life="2000" />
+
+			<p:panelGrid id="panel" columns="1">
+				<p:row>
+					<p:outputLabel value="Proveedor:" for="dd_provider" />
+					<p:spacer width="10" height="10" />
+					<p:autoComplete id="dd_provider" dropdown="true"
+						value="#{home.provider}" completeMethod="#{home.completeText}" />
+				</p:row>
+
+				<p:row>
+					<p:fileUpload label="Seleccionar Archivo"
+						fileUploadListener="#{home.handleFileUpload}" mode="advanced"
+						dragDropSupport="true" update="panel" sizeLimit="10000000"
+						auto="true" allowTypes="/(\.|\/)(xls|xlsx)$/" />
+					<p:outputLabel styleClass="label" value="#{home.fileName}" />
+				</p:row>
+				<p:dataTable var="movement" id="table" value="#{home.movements}"
+					scrollable="true" resizableColumns="true" update="growl"
+					scrollHeight="250" emptyMessage="Aun no se han cragado datos">
+					<p:column headerText="Fecha" style="width:150px;">
+						<h:outputText value="#{movement.date}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Concepto" style="width:300px;">
+						<h:outputText value="#{movement.concept}" />
+					</p:column>
+					<p:column headerText="Cuenta" style="width:100px;">
+						<h:outputText value="#{movement.account}" />
+					</p:column>
+					<p:column headerText="Cliente" style="width:300px;">
+						<h:outputText value="#{movement.clientName}" />
+					</p:column>
+					<p:column headerText="" style="width:20px;">
+						<h:outputText value="#{movement.currency}" />
+					</p:column>
+					<p:column headerText="Monto" style="width:100px;">
+						<h:outputText value="#{movement.amount}" />
+					</p:column>
+					<p:column headerText="RUT">
+						<h:outputText value="#{movement.rut}" />
+					</p:column>
+				</p:dataTable>
+
+				<p:row>
+					<p:commandButton value="Descargar" ajax="false"
+						onclick="PrimeFaces.monitorDownload(start, stop);"
+						icon="ui-icon-arrowthick-1-s">
+						<p:fileDownload value="#{home.downloadFile}" />
+					</p:commandButton>
+					<p:commandButton value="Limpiar" id="ajax" update="panel"
+						actionListener="#{home.clear}" 
+						style="float:right;">
+						<p:confirm header="Confirmación"
+							message="Esta seguro que desea eliminar los datos ingresados?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:row>
+			</p:panelGrid>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+				<p:commandButton value="Yes" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+	</p:panel>
+</h:body>
+</html>
