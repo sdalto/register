@@ -30,7 +30,9 @@ public class CompanyDAO {
 	
 	public void update(Company company) {
 		ObjectContainer db = DB4OUtil.open();
-		DB4OUtil.updateDB4OCompany(company, db);
+		Company example = new Company();
+		example.setId(company.getId());
+		DB4OUtil.updateDB4OCompany(example, db, company);
 		db.close();
 	}
 

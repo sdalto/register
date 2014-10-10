@@ -69,18 +69,16 @@ public class DB4OUtil {
 		return watch.elapsed();
 	}
 	
-	public static long updateDB4OCompany(Company o, ObjectContainer db) {
+	public static long updateDB4OCompany(Object o, ObjectContainer db, Company company) {
 		StopWatch watch = new StopWatch();
 		watch.start();
 
 		try {
-			Company exampleCompany = new Company();
-			exampleCompany.setId(o.getId());
 			ObjectSet<Object> queryByExample = db.queryByExample(o);
 			
 			Company updatedCompany = (Company) queryByExample.next();
-			updatedCompany.setClients(o.getClients());
-			updatedCompany.setName(o.getName());
+			updatedCompany.setClients(company.getClients());
+			updatedCompany.setName(company.getName());
 			
 			db.store(updatedCompany);
 			db.commit();
