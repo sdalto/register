@@ -11,7 +11,6 @@ public class Company implements Serializable{
 		
 	private UUID id;
 	private String name;
-	private List<Client> clients = new LinkedList<Client>();
 
 	public UUID getId() {
 		return id;
@@ -27,14 +26,6 @@ public class Company implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public List<Client> getClients() {
-		return clients;
-	}
-
-	public void setClients(List<Client> clients) {
-		this.clients = clients;
 	}
 
 }

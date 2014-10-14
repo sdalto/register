@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.rilla.register.repository.model.Client;
 import com.rilla.register.repository.model.Company;
 import com.rilla.register.web.spring.Services;
 
@@ -21,27 +22,56 @@ public class CompanyController {
 	private List<Company> companies;
 
 	private List<Company> filteredCompanies;
+	
+	private List<Client> clients;
 
 	private String newCompanyName;
 	
 	private Company selectedCompany;
+	
+	private String newClientName;
+	
+	private String newClientNumber;
+	
+	private Client selectedClient;
 
 	@PostConstruct
 	public void init() {
 		companies = getAllCompanies();
 	}
 
-	public void onRowEdit(RowEditEvent event) {
+	public void onCompanyRowEdit(RowEditEvent event) {
 		Services.FACADE.companyBean.update((Company) event.getObject());
 		FacesMessage msg = new FacesMessage("Se ha editado el cliente",
 				((Company) event.getObject()).getId() + "");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
-
-	public void onRowCancel(RowEditEvent event) {
+	
+	public void onRowSelect(RowEditEvent event) {
+		Services.FACADE.companyBean.update((Company) event.getObject());
+		FacesMessage msg = new FacesMessage("Se ha editado el cliente",
+				((Company) event.getObject()).getId() + "");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+	
+	public void onCompanyRowCancel(RowEditEvent event) {
 		FacesMessage msg = new FacesMessage(
 				"Se ha cancelado la edicion del cliente",
 				((Company) event.getObject()).getId() + "");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+	
+	public void onClientRowEdit(RowEditEvent event) {
+		Services.FACADE.companyBean.update((Company) event.getObject());
+		FacesMessage msg = new FacesMessage("Se ha editado el cliente",
+				((Client) event.getObject()).getId() + "");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
+	public void onClientRowCancel(RowEditEvent event) {
+		FacesMessage msg = new FacesMessage(
+				"Se ha cancelado la edicion del cliente",
+				((Client) event.getObject()).getId() + "");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
@@ -51,7 +81,7 @@ public class CompanyController {
 		
 		Services.FACADE.companyBean.add(newCompany);
 		companies.add(newCompany);
-		
+		selectedCompany = null;
 		newCompanyName = null;
 		
 		FacesContext.getCurrentInstance().addMessage(null,
@@ -67,6 +97,32 @@ public class CompanyController {
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 	
+	public void addClient() {
+		Client newClient = new Client();
+		newClient.setName(newClientName);
+		newClient.setNumber(newClientNumber);
+		newClient.setCompanyId(selectedCompany.getId());
+		
+//		Services.FACADE.companyBean.add(newCompany);
+		clients.add(newClient);
+		selectedClient = null;
+		newClientName = null;
+		newClientNumber = null;
+		
+		
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage("Se ha guardado la empresa " + newClient.getName()));
+	}
+
+	public void deleteClient() {
+//		Services.FACADE.companyBean.deleteCompany(selectedCompany);
+		clients.remove(selectedClient);
+		selectedClient = new Client();
+		FacesMessage msg = new FacesMessage(
+				"Se ha cancelado la edicion del cliente", selectedCompany.getName());
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+	
 	public List<Company> getCompanies() {
 		return companies;
 	}
@@ -75,6 +131,14 @@ public class CompanyController {
 		this.companies = companies;
 	}
 
+	public List<Client> getClients() {
+		return clients;
+	}
+	
+	public void setClients(List<Client> clients) {
+		this.clients = clients;
+	}
+	
 	public List<Company> getFilteredCompanies() {
 		return filteredCompanies;
 	}
@@ -105,5 +169,13 @@ public class CompanyController {
 	
 	public void setSelectedCompany(Company selectedCompany) {
 		this.selectedCompany = selectedCompany;
+	}
+	
+	public Client getSelectedClient() {
+		return selectedClient;
+	}
+	
+	public void setSelectedClient(Client selectedClient) {
+		this.selectedClient = selectedClient;
 	}
 }

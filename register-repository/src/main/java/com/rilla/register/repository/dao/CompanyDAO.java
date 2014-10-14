@@ -39,35 +39,33 @@ public class CompanyDAO {
 	public List<Company> getAllCompanies() {
 		ObjectContainer db = DB4OUtil.open();
 		List<Company> list = DB4OUtil.readAll(db, Company.class);
-
+		List<Company> result = new LinkedList<>();
 		if (CollectionUtils.isNotEmpty(list)) {
-			List<Company> result = new LinkedList<>();
 			for (Company company : list) {
 				Company c = new Company();
 				c.setId(company.getId());
 				c.setName(company.getName());
-				c.setClients(getClients(company));
 				result.add(c);
 			}
 			return result;
 		}
 		db.close();
-		return null;
+		return result;
 	}
 
-	private List<Client> getClients(Company company) {
-		if (CollectionUtils.isNotEmpty(company.getClients())) {
-			List<Client> clients = new LinkedList<>();
-			for (Client client : company.getClients()) {
-				Client cl = new Client();
-
-				cl.setDescription(client.getDescription());
-				cl.setNumber(client.getNumber());
-				clients.add(cl);
-			}
-			return clients;
-		}
-		return null;
-	}
+//	private List<Client> getClients(Company company) {
+//		if (CollectionUtils.isNotEmpty(company.getClients())) {
+//			List<Client> clients = new LinkedList<>();
+//			for (Client client : company.getClients()) {
+//				Client cl = new Client();
+//
+//				cl.setDescription(client.getDescription());
+//				cl.setNumber(client.getNumber());
+//				clients.add(cl);
+//			}
+//			return clients;
+//		}
+//		return null;
+//	}
 
 }

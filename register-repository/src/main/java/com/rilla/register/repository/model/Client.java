@@ -1,27 +1,46 @@
 package com.rilla.register.repository.model;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class Client implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	private String description;
-	private int number;
+	private UUID id;
+	private UUID companyId;
+	private String name;
+	private String number;
 
-	public String getDescription() {
-		return description;
+	public UUID getId() {
+		return id;
+	}
+	
+	public void setId(UUID id) {
+		this.id = id;
+	}
+	
+	public UUID getCompanyId() {
+		return companyId;
+	}
+	
+	public void setCompanyId(UUID companyId) {
+		this.companyId = companyId;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public int getNumber() {
+	public String getNumber() {
 		return number;
 	}
 
-	public void setNumber(int number) {
+	public void setNumber(String number) {
 		this.number = number;
 	}
 

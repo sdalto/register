@@ -59,8 +59,7 @@ public class RegisterWebServer {
 	}
 
 	private Server createNewServer(String[] args) {
-		int port = args.length > 0 ? Integer.parseInt(args[0]) : DEFAULT_PORT;
-		Server server = new Server(port);
+		Server server = new Server(DEFAULT_PORT);
 
 		WebAppContext handler = this.buildWebAppContext(args);
 		server.setHandler(handler);
@@ -75,24 +74,23 @@ public class RegisterWebServer {
 	}
 
 	private WebAppContext buildWebAppContext(String[] args) {
-		boolean dev = args.length > 2 ? args[2].equals("dev") : false;
+		boolean dev = args.length > 0 ? args[0].equals("dev") : false;
 
 		AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
 		applicationContext.register(WebContext.class);
 
 		LOGGER.info("Init WebAppContext");
-		String contextPath = args.length > 1 ? args[1] : JSF_CONTEXT_NAME;
 		WebAppContext handler = new WebAppContext();
-		handler.setContextPath(contextPath);
+		handler.setContextPath(JSF_CONTEXT_NAME);
 		handler.setWelcomeFiles(new String[] { "views/home.xhtml" });
 		handler.setDisplayName(DISPLAY_NAME);
 
 		String[] resources = null;
-		// if (dev) {
-		resources = new String[] { "./src/main/webapp", "./target" };
-		// } else {
-		// resources = new String[] { "../src/main/webapp" };
-		// }
+		if (dev) {
+			resources = new String[] { "./src/main/webapp", "./target" };
+		} else {
+			resources = new String[] { "./webapp" };
+		}
 		handler.setBaseResource(new ResourceCollection(resources));
 		handler.setResourceAlias("/WEB-INF/classes/", "/classes/");
 

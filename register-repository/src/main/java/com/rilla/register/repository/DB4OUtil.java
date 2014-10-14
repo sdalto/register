@@ -77,7 +77,6 @@ public class DB4OUtil {
 			ObjectSet<Object> queryByExample = db.queryByExample(o);
 			
 			Company updatedCompany = (Company) queryByExample.next();
-			updatedCompany.setClients(company.getClients());
 			updatedCompany.setName(company.getName());
 			
 			db.store(updatedCompany);
