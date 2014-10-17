@@ -3,12 +3,21 @@
 	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
 
-<!-- 	<lifecycle> -->
-<!-- 		<phase-listener>com.despegar.monitor.front.security.AccessControlListener</phase-listener> -->
-<!-- 	</lifecycle> -->
+	<!-- <lifecycle> -->
+	<!-- <phase-listener>com.despegar.monitor.front.security.AccessControlListener</phase-listener> -->
+	<!-- </lifecycle> -->
 
-<!-- 	<factory> -->
-<!-- 	    <exception-handler-factory>org.omnifaces.exceptionhandler.FullAjaxExceptionHandlerFactory</exception-handler-factory> -->
-<!-- 	</factory> -->
-
+	<!-- <factory> -->
+	<!-- <exception-handler-factory>org.omnifaces.exceptionhandler.FullAjaxExceptionHandlerFactory</exception-handler-factory> -->
+	<!-- </factory> -->
+	<managed-bean>
+		<managed-bean-name>homeController</managed-bean-name>
+		<managed-bean-class>com.rilla.register.web.controller.HomeController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>companyController</managed-bean-name>
+		<managed-bean-class>com.rilla.register.web.controller.CompanyController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 </faces-config>

@@ -2,7 +2,6 @@ package com.rilla.register.web.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,7 +19,7 @@ import org.primefaces.model.StreamedContent;
 import com.rilla.register.repository.AccountingEntry;
 import com.rilla.register.web.spring.Services;
 
-@ManagedBean(name = "home")
+@ManagedBean
 @SessionScoped
 public class HomeController {
 
@@ -71,12 +70,11 @@ public class HomeController {
 		List<String> p = new LinkedList<String>();
 		p.add("Zenga");
 		setProviders(p);
+		provider = providers.get(0);
     }
 	
-	public List<String> completeText(String query) {
-        List<String> results = new ArrayList<String>();
-            results.add("Zenga");
-        return results;
+	public List<String> getProviders(String query) {
+        return providers;
     }
 	
 	public void clear(ActionEvent actionEvent) {

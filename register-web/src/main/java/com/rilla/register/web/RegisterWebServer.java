@@ -3,13 +3,10 @@ package com.rilla.register.web;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.AccessControlException;
 import java.util.EnumSet;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import javax.el.ELException;
-import javax.faces.application.ViewExpiredException;
 import javax.servlet.DispatcherType;
 
 import org.eclipse.jetty.server.Server;
@@ -20,7 +17,6 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.primefaces.webapp.filter.FileUploadFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;

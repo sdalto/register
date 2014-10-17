@@ -161,6 +161,7 @@
 						<!-- this line excludes env folder entirely from the jar -->
 						<exclude>**/conf/env/**</exclude>
 						<exclude>**/logback.xml</exclude>
+						<exclude>**/*.jsfdia</exclude>
 					</excludes>
 					<archive>
 						<manifest>
@@ -199,7 +200,7 @@
 						<configuration>
 							<tasks>
 								<copy todir="target/webapp" filtering="false">
-									<fileset dir="${project.basedir}/src/main/webapp"/>
+									<fileset dir="${project.basedir}/src/main/webapp" />
 								</copy>
 							</tasks>
 						</configuration>
