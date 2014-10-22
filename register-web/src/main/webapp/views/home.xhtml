@@ -55,20 +55,28 @@
 				<p:row>
 					<p:outputLabel value="Proveedor:" for="dd_provider" />
 					<p:spacer width="10" height="10" />
-					<p:autoComplete id="dd_provider" dropdown="true"
-						value="#{homeController.provider}" completeMethod="#{homeController.getProviders}" />
+					<p:autoComplete id="dd_provider"
+						value="#{homeController.selectedProvider}" dropdown="true"
+						completeMethod="#{homeController.getProviders}" var="provider"
+						itemLabel="#{provider.name}" itemValue="#{provider}"
+						converter="providerConverter">
+						<p:ajax event="itemSelect"
+							listener="#{homeController.onItemSelect}" />
+					</p:autoComplete>
 				</p:row>
 
 				<p:row>
 					<p:fileUpload label="Seleccionar Archivo"
-						fileUploadListener="#{homeController.handleFileUpload}" mode="advanced"
-						dragDropSupport="true" update="panel" sizeLimit="10000000"
-						auto="true" allowTypes="/(\.|\/)(xls|xlsx)$/" />
-					<p:outputLabel styleClass="label" value="#{homeController.fileName}" />
+						fileUploadListener="#{homeController.handleFileUpload}"
+						mode="advanced" dragDropSupport="true" update="panel"
+						sizeLimit="10000000" auto="true" allowTypes="/(\.|\/)(xls|xlsx)$/" />
+					<p:outputLabel styleClass="label"
+						value="#{homeController.fileName}" />
 				</p:row>
-				<p:dataTable var="movement" id="table" value="#{homeController.movements}"
-					scrollable="true" resizableColumns="true" update="growl"
-					scrollHeight="250" emptyMessage="Aun no se han cragado datos">
+				<p:dataTable var="movement" id="table"
+					value="#{homeController.movements}" scrollable="true"
+					resizableColumns="true" update="growl" scrollHeight="250"
+					emptyMessage="Aun no se han cragado datos">
 					<p:column headerText="Fecha" style="width:150px;">
 						<h:outputText value="#{movement.date}">
 							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
@@ -101,8 +109,7 @@
 						<p:fileDownload value="#{homeController.downloadFile}" />
 					</p:commandButton>
 					<p:commandButton value="Limpiar" id="ajax" update="panel"
-						actionListener="#{homeController.clear}" 
-						style="float:right;">
+						actionListener="#{homeController.clear}" style="float:right;">
 						<p:confirm header="Confirmación"
 							message="Esta seguro que desea eliminar los datos ingresados?"
 							icon="ui-icon-alert" />

@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
@@ -40,16 +41,10 @@ public class ExcelReaderBean {
 	@Autowired
 	private CompanyBean companyBean;
 
-	public List<AccountingEntry> readFile(InputStream stream, String providerName,
+	public List<AccountingEntry> readFile(InputStream stream, Provider provider,
 			String companyName, String fileName) {
-		providerBean.findByName(providerName);
 		companyBean.findByName(companyName);
-
-		Metadata m = new Metadata();
-		Provider p = new Provider();
-		p.setMetadata(m);
-
-		return read(stream, p, fileName);
+		return read(stream, provider, fileName);
 	}
 
 	private List<AccountingEntry> read(InputStream stream, Provider provider, String fileName) {
@@ -85,10 +80,12 @@ public class ExcelReaderBean {
 				// TODO: Ver que hago sino
 
 				// CONCEPT
-				String concept = null;
-				cell = row.getCell(metadata.getColumnConcept());
-				if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-					concept = cell.getRichStringCellValue().getString();
+				String concept = "";
+				for (Integer pos : metadata.getColumnsConcept()) {
+					cell = row.getCell(pos);
+					if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+						concept =concept + cell.getRichStringCellValue().getString() + " ";
+					}
 				}
 
 				// RUT

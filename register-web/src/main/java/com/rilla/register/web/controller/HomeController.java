@@ -13,70 +13,70 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import com.rilla.register.repository.AccountingEntry;
+import com.rilla.register.repository.model.Provider;
 import com.rilla.register.web.spring.Services;
 
 @ManagedBean
 @SessionScoped
 public class HomeController {
 
-	private String provider;
+	private Provider selectedProvider;
 	private String fileName;
-	
-	private List<String> providers;
-	private List<AccountingEntry> movements; 
+
+	private List<Provider> providers;
+	private List<AccountingEntry> movements;
 
 	// Getters and Setters
-	
-	public String getProvider() {
-		return provider;
+
+	public Provider getSelectedProvider() {
+		return selectedProvider;
 	}
 
-	public void setProvider(String provider) {
-		this.provider = provider;
+	public void setSelectedProvider(Provider selectedProvider) {
+		this.selectedProvider = selectedProvider;
 	}
 
 	public String getFileName() {
 		return fileName;
 	}
-	
+
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-	
-	public List<String> getProviders() {
+
+	public List<Provider> getProviders() {
 		return providers;
 	}
-	
-	public void setProviders(List<String> providers) {
+
+	public void setProviders(List<Provider> providers) {
 		this.providers = providers;
 	}
-	
+
 	public List<AccountingEntry> getMovements() {
 		return movements;
 	}
-	
+
 	public void setMovements(List<AccountingEntry> movements) {
 		this.movements = movements;
 	}
 
 	// Methods
-	
+
 	@PostConstruct
-    public void init(){
-		List<String> p = new LinkedList<String>();
-		p.add("Zenga");
-		setProviders(p);
-		provider = providers.get(0);
-    }
-	
-	public List<String> getProviders(String query) {
-        return providers;
-    }
-	
+	public void init() {
+		this.providers = Services.FACADE.providerBean.getProviders();
+		selectedProvider = providers.get(0);
+	}
+
+	public List<Provider> getProviders(String query) {
+		return providers;
+	}
+
 	public void clear(ActionEvent actionEvent) {
 		this.movements = null;
 		this.fileName = null;
@@ -88,6 +88,10 @@ public class HomeController {
 				summary, null);
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
+	
+	public void onItemSelect(SelectEvent event) {
+//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item Selected", event.getObject().toString()));
+    }
 
 	public void handleFileUpload(FileUploadEvent event) {
 		if (event.getFile().equals(null)) {
@@ -99,10 +103,9 @@ public class HomeController {
 		InputStream file;
 		try {
 			file = event.getFile().getInputstream();
-			fileName = event.getFile()
-					.getFileName();
-			movements = Services.FACADE.excelReaderBean
-					.readFile(file, "provider", "company", fileName);
+			fileName = event.getFile().getFileName();
+			movements = Services.FACADE.excelReaderBean.readFile(file, selectedProvider,
+					"company", fileName);
 		} catch (IOException e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -110,10 +113,12 @@ public class HomeController {
 							"Error reading file" + e, null));
 		}
 	}
-	
-	public StreamedContent getDownloadFile(){
-		InputStream stream = Services.FACADE.dbfGenerator.createFile("/home/sdalto/Descargas/IMPORTA.dbf", movements);
-		return new DefaultStreamedContent(stream, "application/xls", "/home/sdalto/Descargas/IMPORTA.dbf");
+
+	public StreamedContent getDownloadFile() {
+		InputStream stream = Services.FACADE.dbfGenerator.createFile(
+				"/home/sdalto/Descargas/IMPORTA.dbf", movements);
+		return new DefaultStreamedContent(stream, "application/xls",
+				"/home/sdalto/Descargas/IMPORTA.dbf");
 	}
-	
+
 }

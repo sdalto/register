@@ -1,22 +1,25 @@
 package com.rilla.register.repository.model;
 
+import java.util.List;
+
 import com.rilla.register.repository.constants.AmountType;
 import com.rilla.register.repository.constants.FinalFileType;
 
 public class Metadata {
 
-	private AmountType amountType = AmountType.UNIQUE_COLUMN_PLUS_MINUS;
-	private int firstRow = 8;
-	private FinalFileType finalFileType = FinalFileType.LAST_DATE;
+	private AmountType amountType;
+	private int firstRow;
+	private FinalFileType finalFileType;
 	private String finalValue;
 
-	private Integer columnDate = 3;
-	private Integer columnConcept = 7;
-	private Integer columnRut = 18;
-	private Integer columnAccount = 13;
-	private Integer columnClientName = 15;
-	private Integer columnAmount = 30;
-	private Integer columnCurrency = 29;
+	private Integer columnDate;
+	private Integer columnConcept;
+	private List<Integer> columnsConcept;
+	private Integer columnRut;
+	private Integer columnAccount;
+	private Integer columnClientName;
+	private Integer columnAmount;
+	private Integer columnCurrency;
 	private Integer columnEntryType;
 
 	public AmountType getAmountType() {
@@ -65,6 +68,14 @@ public class Metadata {
 
 	public void setColumnConcept(Integer columnConcept) {
 		this.columnConcept = columnConcept;
+	}
+	
+	public List<Integer> getColumnsConcept() {
+		return columnsConcept;
+	}
+	
+	public void setColumnsConcept(List<Integer> columnsConcept) {
+		this.columnsConcept = columnsConcept;
 	}
 
 	public Integer getColumnRut() {

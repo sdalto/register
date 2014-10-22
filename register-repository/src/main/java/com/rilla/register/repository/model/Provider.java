@@ -1,7 +1,11 @@
 package com.rilla.register.repository.model;
 
-
 public class Provider {
+
+	@Override
+	public String toString() {
+		return name;
+	}
 
 	private Integer id;
 	private String name;
@@ -10,11 +14,11 @@ public class Provider {
 	public Integer getId() {
 		return id;
 	}
-	
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
