@@ -95,7 +95,9 @@
 						<h:outputText value="#{movement.currency}" />
 					</p:column>
 					<p:column headerText="Monto" style="width:100px;">
-						<h:outputText value="#{movement.amount}" />
+						<h:outputText value="#{movement.amount}" style="float:right">
+							<f:convertNumber pattern="#0.00" />
+						</h:outputText>
 					</p:column>
 					<p:column headerText="RUT">
 						<h:outputText value="#{movement.rut}" />

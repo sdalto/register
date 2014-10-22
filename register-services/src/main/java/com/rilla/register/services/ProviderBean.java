@@ -37,6 +37,7 @@ public class ProviderBean {
 		metadata.setAmountType(AmountType.UNIQUE_COLUMN_PLUS_MINUS);
 		metadata.setFirstRow(8);
 		metadata.setFinalFileType(FinalFileType.LAST_DATE);
+		metadata.setDecimals(2);
 		
 		List<Integer> conceptColumns = new LinkedList<>();
 		conceptColumns.add(7);
@@ -59,8 +60,9 @@ public class ProviderBean {
 	private static Provider createZENGAProvider() {
 		Metadata metadata = new Metadata();
 		metadata.setAmountType(AmountType.UNIQUE_COLUMN_PLUS_MINUS);
-		metadata.setFirstRow(5);
+		metadata.setFirstRow(4);
 		metadata.setFinalFileType(FinalFileType.LAST_DATE);
+		metadata.setDecimals(2);
 		
 		List<Integer> conceptColumns = new LinkedList<>();
 		conceptColumns.add(3);

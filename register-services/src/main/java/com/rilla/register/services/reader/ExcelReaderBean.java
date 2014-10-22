@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -41,13 +42,14 @@ public class ExcelReaderBean {
 	@Autowired
 	private CompanyBean companyBean;
 
-	public List<AccountingEntry> readFile(InputStream stream, Provider provider,
-			String companyName, String fileName) {
+	public List<AccountingEntry> readFile(InputStream stream,
+			Provider provider, String companyName, String fileName) {
 		companyBean.findByName(companyName);
 		return read(stream, provider, fileName);
 	}
 
-	private List<AccountingEntry> read(InputStream stream, Provider provider, String fileName) {
+	private List<AccountingEntry> read(InputStream stream, Provider provider,
+			String fileName) {
 		Metadata metadata = provider.getMetadata();
 		try {
 			Sheet sheet = getSheet(fileName, stream);
@@ -84,17 +86,21 @@ public class ExcelReaderBean {
 				for (Integer pos : metadata.getColumnsConcept()) {
 					cell = row.getCell(pos);
 					if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-						concept =concept + cell.getRichStringCellValue().getString() + " ";
+						concept = concept
+								+ cell.getRichStringCellValue().getString()
+								+ " ";
 					}
 				}
 
 				// RUT
 				String rut = null;
-				cell = row.getCell(metadata.getColumnRut());
-				if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-					rut = cell.getRichStringCellValue().getString();
-				} else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-					rut = cell.getDateCellValue().toString();
+				if (metadata.getColumnRut() != null) {
+					cell = row.getCell(metadata.getColumnRut());
+					if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+						rut = cell.getRichStringCellValue().getString();
+					} else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+						rut = cell.getDateCellValue().toString();
+					}
 				}
 
 				// ACCOUNT
@@ -120,7 +126,9 @@ public class ExcelReaderBean {
 				if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 					amount = cell.getNumericCellValue();
 				}
-
+			      
+				amount = round(amount, metadata.getDecimals());
+				
 				if (amount < 0) {
 					entryType = EntryType.HABER;
 				} else {
@@ -129,11 +137,12 @@ public class ExcelReaderBean {
 
 				// CURRENCY
 				String currency = null;
-				cell = row.getCell(metadata.getColumnCurrency());
-				if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-					currency = cell.getRichStringCellValue().getString();
+				if (metadata.getColumnCurrency() != null) {
+					cell = row.getCell(metadata.getColumnCurrency());
+					if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+						currency = cell.getRichStringCellValue().getString();
+					}
 				}
-
 				AccountingEntry newEntry = new AccountingEntry();
 				newEntry.setAccount(account);
 				newEntry.setAmount(BigDecimal.valueOf(amount));
@@ -154,13 +163,13 @@ public class ExcelReaderBean {
 			stream.close();
 			return entries;
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 
 	private Sheet getSheet(String fileName, InputStream inp) throws IOException {
@@ -195,6 +204,15 @@ public class ExcelReaderBean {
 		fname = fileName.substring(0, mid);
 		ext = fileName.substring(mid + 1, fileName.length());
 		return ext;
+	}
+	
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    long factor = (long) Math.pow(10, places);
+	    value = value * factor;
+	    long tmp = Math.round(value);
+	    return (double) tmp / factor;
 	}
 
 }

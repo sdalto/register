@@ -11,6 +11,7 @@ public class Metadata {
 	private int firstRow;
 	private FinalFileType finalFileType;
 	private String finalValue;
+	private int decimals;
 
 	private Integer columnDate;
 	private Integer columnConcept;
@@ -52,6 +53,14 @@ public class Metadata {
 
 	public void setFinalValue(String finalValue) {
 		this.finalValue = finalValue;
+	}
+	
+	public int getDecimals() {
+		return decimals;
+	}
+	
+	public void setDecimals(int decimals) {
+		this.decimals = decimals;
 	}
 
 	public Integer getColumnDate() {

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.db4o.config.Entry;
 import com.linuxense.javadbf.DBFException;
 import com.linuxense.javadbf.DBFField;
 import com.linuxense.javadbf.DBFWriter;
@@ -87,34 +88,35 @@ public class DBFGenerator {
 
 			rowData[1] = getNumericValue(day);
 			rowData[2] = getNumericValue(month);
-			rowData[3] = getNumericValue(year);
+			rowData[3] = getNumericValue(year) - 2000;
 		}
 
-		rowData[4] = "No se";
-		rowData[5] = getNumericValue(1);
-		rowData[6] = "No se";
-		rowData[7] = "No se";
+		rowData[4] = getNumericValue(5);
+		rowData[5] = getNumericValue(0);
+		rowData[6] = getNumericValue(0);
+		rowData[7] = getNumericValue(0);
 		rowData[8] = getNumericValue(1);
-		rowData[9] = "No se";
-		rowData[10] = "No se";
-		rowData[11] = getNumericValue(1);
-		rowData[12] = "No se";
+		rowData[9] = getNumericValue(0);
+		rowData[10] = getNumericValue(0);
+		rowData[11] = accountingEntry.getConcept();
+		
+//		rowData[12] = accountingEntry.getAmount().compareTo(BigDecimal.ZERO) >= 0 ? "Debe" : "Haber"; 
 
 		// Set Cuenta
 		rowData[13] = accountingEntry.getAccount();
 
-		rowData[14] = getNumericValue(1);
+		rowData[14] = accountingEntry.getAmount().compareTo(BigDecimal.ZERO) >= 0 ? "Debe" : "Haber"; 
 
 		// Set monto
 		rowData[15] = accountingEntry.getCurrency();
 		rowData[16] = getNumericValue(accountingEntry.getAmount());
 
-		rowData[17] = getNumericValue(1);
-		rowData[18] = "No se";
-		rowData[19] = "No se";
-		rowData[20] = getNumericValue(1);
-		rowData[21] = "No se";
-		rowData[22] = "No se";
+		rowData[17] = getNumericValue(0);
+		rowData[18] = getNumericValue(0);
+		rowData[19] = getNumericValue(0);
+		rowData[20] = getNumericValue(0);
+		rowData[21] = getNumericValue(0);
+		rowData[22] = getNumericValue(0);
 
 		writer.addRecord(rowData);
 	}
@@ -140,57 +142,54 @@ public class DBFGenerator {
 		fields[3] = new DBFField();
 		fields[3].setName("ANIO");
 		fields[3].setDataType(DBFField.FIELD_TYPE_N);
-		fields[3].setFieldLength(4);
+		fields[3].setFieldLength(2);
 
 		// TODO: que es?
 		fields[4] = new DBFField();
 		fields[4].setName("NROTA");
-		fields[4].setDataType(DBFField.FIELD_TYPE_C);
-		fields[4].setFieldLength(20);
+		fields[4].setDataType(DBFField.FIELD_TYPE_N);
+		fields[4].setFieldLength(2);
 
 		// TODO: que es?
 		fields[5] = new DBFField();
 		fields[5].setName("NROSUBTIPO");
 		fields[5].setDataType(DBFField.FIELD_TYPE_N);
-		fields[5].setFieldLength(12);
+		fields[5].setFieldLength(1);
 
 		// TODO: que es?
 		fields[6] = new DBFField();
 		fields[6].setName("CODIGOV");
-		fields[6].setDataType(DBFField.FIELD_TYPE_C);
-		fields[6].setFieldLength(20);
+		fields[6].setDataType(DBFField.FIELD_TYPE_N);
+		fields[6].setFieldLength(1);
 
 		// TODO: que es?
 		fields[7] = new DBFField();
 		fields[7].setName("VD");
-		fields[7].setDataType(DBFField.FIELD_TYPE_C);
-		fields[7].setFieldLength(20);
+		fields[7].setDataType(DBFField.FIELD_TYPE_N);
+		fields[7].setFieldLength(2);
 
 		// TODO: que es?
 		fields[8] = new DBFField();
 		fields[8].setName("VM");
 		fields[8].setDataType(DBFField.FIELD_TYPE_N);
-		fields[8].setFieldLength(12);
-		fields[8].setDecimalCount(2);
+		fields[8].setFieldLength(2);
 
 		// TODO: que es?
 		fields[9] = new DBFField();
 		fields[9].setName("VA");
-		fields[9].setDataType(DBFField.FIELD_TYPE_C);
-		fields[9].setFieldLength(10);
+		fields[9].setDataType(DBFField.FIELD_TYPE_N);
+		fields[9].setFieldLength(2);
 
 		// TODO: que es?
 		fields[10] = new DBFField();
 		fields[10].setName("BORRADOR");
-		fields[10].setDataType(DBFField.FIELD_TYPE_C);
-		fields[10].setFieldLength(20);
+		fields[10].setDataType(DBFField.FIELD_TYPE_N);
+		fields[10].setFieldLength(1);
 
-		// TODO: que es?
 		fields[11] = new DBFField();
 		fields[11].setName("LEYENDA");
-		fields[11].setDataType(DBFField.FIELD_TYPE_N);
-		fields[11].setFieldLength(12);
-		fields[11].setDecimalCount(2);
+		fields[11].setDataType(DBFField.FIELD_TYPE_C);
+		fields[11].setFieldLength(128);
 
 		// TODO: que es?
 		fields[12] = new DBFField();
@@ -206,9 +205,8 @@ public class DBFGenerator {
 		// TODO: que es?
 		fields[14] = new DBFField();
 		fields[14].setName("SL");
-		fields[14].setDataType(DBFField.FIELD_TYPE_N);
+		fields[14].setDataType(DBFField.FIELD_TYPE_C);
 		fields[14].setFieldLength(12);
-		fields[14].setDecimalCount(2);
 
 		fields[15] = new DBFField();
 		fields[15].setName("SIMBOLO");
@@ -224,39 +222,37 @@ public class DBFGenerator {
 		fields[17] = new DBFField();
 		fields[17].setName("CL");
 		fields[17].setDataType(DBFField.FIELD_TYPE_N);
-		fields[17].setFieldLength(12);
-		fields[17].setDecimalCount(2);
+		fields[17].setFieldLength(1);
 
 		// TODO: que es?
 		fields[18] = new DBFField();
 		fields[18].setName("NS");
-		fields[18].setDataType(DBFField.FIELD_TYPE_C);
-		fields[18].setFieldLength(10);
+		fields[18].setDataType(DBFField.FIELD_TYPE_N);
+		fields[18].setFieldLength(1);
 
 		// TODO: que es?
 		fields[19] = new DBFField();
 		fields[19].setName("CAMPO1");
-		fields[19].setDataType(DBFField.FIELD_TYPE_C);
-		fields[19].setFieldLength(20);
+		fields[19].setDataType(DBFField.FIELD_TYPE_N);
+		fields[19].setFieldLength(1);
 
 		// TODO: que es?
 		fields[20] = new DBFField();
 		fields[20].setName("CAMPO2");
 		fields[20].setDataType(DBFField.FIELD_TYPE_N);
-		fields[20].setFieldLength(12);
-		fields[20].setDecimalCount(2);
+		fields[20].setFieldLength(1);
 
 		// TODO: que es?
 		fields[21] = new DBFField();
 		fields[21].setName("CAMPO3");
-		fields[21].setDataType(DBFField.FIELD_TYPE_C);
-		fields[21].setFieldLength(10);
+		fields[21].setDataType(DBFField.FIELD_TYPE_N);
+		fields[21].setFieldLength(1);
 
 		// TODO: que es?
 		fields[22] = new DBFField();
 		fields[22].setName("CAMPO4");
-		fields[22].setDataType(DBFField.FIELD_TYPE_C);
-		fields[22].setFieldLength(20);
+		fields[22].setDataType(DBFField.FIELD_TYPE_N);
+		fields[22].setFieldLength(1);
 		return fields;
 	}
 
