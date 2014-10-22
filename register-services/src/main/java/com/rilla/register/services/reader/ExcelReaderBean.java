@@ -43,13 +43,13 @@ public class ExcelReaderBean {
 	private CompanyBean companyBean;
 
 	public List<AccountingEntry> readFile(InputStream stream,
-			Provider provider, String companyName, String fileName) {
+			Provider provider, String companyName, String fileName, String currency) {
 		companyBean.findByName(companyName);
-		return read(stream, provider, fileName);
+		return read(stream, provider, fileName, currency);
 	}
 
 	private List<AccountingEntry> read(InputStream stream, Provider provider,
-			String fileName) {
+			String fileName, String currency) {
 		Metadata metadata = provider.getMetadata();
 		try {
 			Sheet sheet = getSheet(fileName, stream);
@@ -135,14 +135,6 @@ public class ExcelReaderBean {
 					entryType = EntryType.DEBE;
 				}
 
-				// CURRENCY
-				String currency = null;
-				if (metadata.getColumnCurrency() != null) {
-					cell = row.getCell(metadata.getColumnCurrency());
-					if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-						currency = cell.getRichStringCellValue().getString();
-					}
-				}
 				AccountingEntry newEntry = new AccountingEntry();
 				newEntry.setAccount(account);
 				newEntry.setAmount(BigDecimal.valueOf(amount));

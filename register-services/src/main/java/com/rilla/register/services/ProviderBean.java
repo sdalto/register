@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import com.rilla.register.repository.constants.AmountType;
@@ -25,11 +24,11 @@ public class ProviderBean {
 	@PostConstruct
 	public void setProviders() {
 		Provider isa = createISAProvider();
-		Provider zenga = createZENGAProvider();
+		Provider scantech = createScanntechProvider();
 		
 		providers = new LinkedList<>();
 		providers.add(isa);
-		providers.add(zenga);
+		providers.add(scantech);
 	}
 
 	private Provider createISAProvider() {
@@ -57,7 +56,7 @@ public class ProviderBean {
 		return isa;
 	}
 	
-	private static Provider createZENGAProvider() {
+	private static Provider createScanntechProvider() {
 		Metadata metadata = new Metadata();
 		metadata.setAmountType(AmountType.UNIQUE_COLUMN_PLUS_MINUS);
 		metadata.setFirstRow(4);
@@ -76,12 +75,12 @@ public class ProviderBean {
 		metadata.setColumnAccount(1);
 		metadata.setColumnClientName(2);
 
-		Provider zenga = new Provider();
-		zenga.setId(2);
-		zenga.setName("ZENGA");
-		zenga.setMetadata(metadata);
+		Provider scanntech = new Provider();
+		scanntech.setId(2);
+		scanntech.setName("Scanntech");
+		scanntech.setMetadata(metadata);
 		
-		return zenga;
+		return scanntech;
 	}
 	
 }

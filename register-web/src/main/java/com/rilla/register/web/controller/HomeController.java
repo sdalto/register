@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -27,6 +28,7 @@ public class HomeController {
 
 	private Provider selectedProvider;
 	private String fileName;
+	private String currency = "$";
 
 	private List<Provider> providers;
 	private List<AccountingEntry> movements;
@@ -49,6 +51,14 @@ public class HomeController {
 		this.fileName = fileName;
 	}
 
+	public String getCurrency() {
+		return currency;
+	}
+	
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+	
 	public List<Provider> getProviders() {
 		return providers;
 	}
@@ -89,8 +99,10 @@ public class HomeController {
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 	
-	public void onItemSelect(SelectEvent event) {
-//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item Selected", event.getObject().toString()));
+	public void onProviderItemSelect(SelectEvent event) {
+    }
+	
+	public void onCurrencyItemSelect(SelectEvent event) {
     }
 
 	public void handleFileUpload(FileUploadEvent event) {
@@ -105,7 +117,7 @@ public class HomeController {
 			file = event.getFile().getInputstream();
 			fileName = event.getFile().getFileName();
 			movements = Services.FACADE.excelReaderBean.readFile(file, selectedProvider,
-					"company", fileName);
+					"company", fileName, currency);
 		} catch (IOException e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
