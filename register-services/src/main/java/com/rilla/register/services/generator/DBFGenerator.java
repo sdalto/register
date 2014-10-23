@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.db4o.config.Entry;
 import com.linuxense.javadbf.DBFException;
 import com.linuxense.javadbf.DBFField;
 import com.linuxense.javadbf.DBFWriter;
@@ -39,7 +38,9 @@ public class DBFGenerator {
 			// now populate DBFWriter
 			if (CollectionUtils.isNotEmpty(entries)) {
 				for (AccountingEntry accountingEntry : entries) {
-					createRow(writer, accountingEntry);
+					createSubtotalRow(writer, accountingEntry);
+					createIvaRow(writer, accountingEntry);
+					createTotalRow(writer, accountingEntry);
 				}
 			}
 
@@ -61,21 +62,54 @@ public class DBFGenerator {
 		}
 		return null;
 	}
-	
-	private Double getNumericValue(int value){
+
+	private Double getNumericValue(int value) {
 		return new Double(value);
 	}
-	
-	private Double getNumericValue(BigDecimal value){
+
+	private Double getNumericValue(BigDecimal value) {
 		return value.doubleValue();
 	}
 
-	private void createRow(DBFWriter writer, AccountingEntry accountingEntry)
+	private void createSubtotalRow(DBFWriter writer, AccountingEntry accountingEntry)
 			throws DBFException {
-		Object rowData[] = new Object[CANT_COLUMNS];
+		Object subtotalRowData[] = new Object[CANT_COLUMNS];
 
+		setCommonData(accountingEntry, subtotalRowData);
+		subtotalRowData[13] = accountingEntry.getCompany().getSubtotalAccount();
+		subtotalRowData[14] = "Debe";
+		subtotalRowData[16] = getNumericValue(accountingEntry
+				.getSubtotalAmount());
+		writer.addRecord(subtotalRowData);
+	}
+
+	private void createIvaRow(DBFWriter writer, AccountingEntry accountingEntry)
+			throws DBFException {
+		Object ivaRowData[] = new Object[CANT_COLUMNS];
+
+		setCommonData(accountingEntry, ivaRowData);
+		ivaRowData[13] = accountingEntry.getCompany().getIvaAccount();
+		ivaRowData[14] = "Debe";
+		ivaRowData[16] = getNumericValue(accountingEntry
+				.getIvaAmount());
+		writer.addRecord(ivaRowData);
+	}
+	
+	private void createTotalRow(DBFWriter writer, AccountingEntry accountingEntry)
+			throws DBFException {
+		Object totalRowData[] = new Object[CANT_COLUMNS];
+
+		setCommonData(accountingEntry, totalRowData);
+		totalRowData[13] = accountingEntry.getCompany().getTotalAccount();
+		totalRowData[14] = "Haber";
+		totalRowData[16] = getNumericValue(accountingEntry
+				.getTotalAmount());
+		writer.addRecord(totalRowData);
+	}
+	
+	private void setCommonData(AccountingEntry accountingEntry, Object[] rowData) {
 		// Set Nro. Asiento
-		rowData[0] = getNumericValue(1);
+		rowData[0] = getNumericValue(accountingEntry.getId());
 
 		// Set Fecha de movimiento
 		Date date = accountingEntry.getDate();
@@ -95,30 +129,17 @@ public class DBFGenerator {
 		rowData[5] = getNumericValue(0);
 		rowData[6] = getNumericValue(0);
 		rowData[7] = getNumericValue(0);
-		rowData[8] = getNumericValue(1);
+		rowData[8] = getNumericValue(0);
 		rowData[9] = getNumericValue(0);
 		rowData[10] = getNumericValue(0);
 		rowData[11] = accountingEntry.getConcept();
-		
-//		rowData[12] = accountingEntry.getAmount().compareTo(BigDecimal.ZERO) >= 0 ? "Debe" : "Haber"; 
-
-		// Set Cuenta
-		rowData[13] = accountingEntry.getAccount();
-
-		rowData[14] = accountingEntry.getAmount().compareTo(BigDecimal.ZERO) >= 0 ? "Debe" : "Haber"; 
-
-		// Set monto
 		rowData[15] = accountingEntry.getCurrency();
-		rowData[16] = getNumericValue(accountingEntry.getAmount());
-
-		rowData[17] = getNumericValue(0);
+		rowData[17] = getNumericValue(accountingEntry.getQuipusRut());
 		rowData[18] = getNumericValue(0);
 		rowData[19] = getNumericValue(0);
 		rowData[20] = getNumericValue(0);
 		rowData[21] = getNumericValue(0);
 		rowData[22] = getNumericValue(0);
-
-		writer.addRecord(rowData);
 	}
 
 	private DBFField[] createFiels() {
@@ -222,7 +243,7 @@ public class DBFGenerator {
 		fields[17] = new DBFField();
 		fields[17].setName("CL");
 		fields[17].setDataType(DBFField.FIELD_TYPE_N);
-		fields[17].setFieldLength(1);
+		fields[17].setFieldLength(10);
 
 		// TODO: que es?
 		fields[18] = new DBFField();

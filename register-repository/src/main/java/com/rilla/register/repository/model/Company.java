@@ -9,9 +9,9 @@ public class Company implements Serializable {
 
 	private UUID id;
 	private String name;
-	private String subtotalAccount;
-	private String ivaAccount;
-	private String totalAccount;
+	private String subtotalAccount = "1234";
+	private String ivaAccount = "4321";
+	private String totalAccount = "6789";
 
 	public UUID getId() {
 		return id;

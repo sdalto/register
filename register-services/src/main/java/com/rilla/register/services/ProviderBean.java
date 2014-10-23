@@ -46,8 +46,8 @@ public class ProviderBean {
 		metadata.setColumnRut(18);
 		metadata.setColumnAccount(13);
 		metadata.setColumnClientName(15);
-		metadata.setColumnAmount(30);
-		metadata.setColumnCurrency(29);
+		metadata.setColumnIvaAmount(26);
+		metadata.setColumnTotalAmount(30);
 		
 		Provider isa = new Provider();
 		isa.setId(1);
@@ -64,14 +64,15 @@ public class ProviderBean {
 		metadata.setDecimals(2);
 		
 		List<Integer> conceptColumns = new LinkedList<>();
+		conceptColumns.add(2);
 		conceptColumns.add(3);
 		conceptColumns.add(4);
 		conceptColumns.add(5);
-		conceptColumns.add(2);
 		
 		metadata.setColumnDate(0);
 		metadata.setColumnsConcept(conceptColumns);
-		metadata.setColumnAmount(9);
+		metadata.setColumnIvaAmount(6);
+		metadata.setColumnTotalAmount(9);
 		metadata.setColumnAccount(1);
 		metadata.setColumnClientName(2);
 

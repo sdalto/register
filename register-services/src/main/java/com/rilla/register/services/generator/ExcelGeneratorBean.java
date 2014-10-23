@@ -116,21 +116,21 @@ public class ExcelGeneratorBean {
 		clientCell.setCellValue(entry.getClientName());
 
 		// Rut
-		XSSFCell rutCell = row.createCell((short) RUT_COLUMN);
-		rutCell.setCellStyle(originalStyle);
-		rutCell.setCellValue(entry.getRut());
-
-		if (EntryType.DEBE == entry.getType()) {
-			// Debe
-			XSSFCell debeCell = row.createCell((short) DEBE_COLUMN);
-			debeCell.setCellStyle(originalStyle);
-			debeCell.setCellValue(entry.getAmount().doubleValue());
-		} else {
-			// Haber
-			XSSFCell haberCell = row.createCell((short) HABER_COLUMN);
-			haberCell.setCellStyle(originalStyle);
-			haberCell.setCellValue(entry.getAmount().doubleValue());
-		}
+//		XSSFCell rutCell = row.createCell((short) RUT_COLUMN);
+//		rutCell.setCellStyle(originalStyle);
+//		rutCell.setCellValue(entry.getRut());
+//
+//		if (EntryType.DEBE == entry.getType()) {
+//			// Debe
+//			XSSFCell debeCell = row.createCell((short) DEBE_COLUMN);
+//			debeCell.setCellStyle(originalStyle);
+//			debeCell.setCellValue(entry.getAmount().doubleValue());
+//		} else {
+//			// Haber
+//			XSSFCell haberCell = row.createCell((short) HABER_COLUMN);
+//			haberCell.setCellStyle(originalStyle);
+//			haberCell.setCellValue(entry.getAmount().doubleValue());
+//		}
 
 	}
 

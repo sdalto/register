@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.rilla.register.repository.AccountingEntry;
 import com.rilla.register.repository.constants.EntryType;
 import com.rilla.register.repository.constants.FinalFileType;
+import com.rilla.register.repository.model.Company;
 import com.rilla.register.repository.model.Metadata;
 import com.rilla.register.repository.model.Provider;
 import com.rilla.register.services.CompanyBean;
@@ -43,13 +44,12 @@ public class ExcelReaderBean {
 	private CompanyBean companyBean;
 
 	public List<AccountingEntry> readFile(InputStream stream,
-			Provider provider, String companyName, String fileName, String currency) {
-		companyBean.findByName(companyName);
-		return read(stream, provider, fileName, currency);
+			Provider provider, Company company, String fileName, String currency) {
+		return read(stream, provider, fileName, currency, company);
 	}
 
 	private List<AccountingEntry> read(InputStream stream, Provider provider,
-			String fileName, String currency) {
+			String fileName, String currency, Company company) {
 		Metadata metadata = provider.getMetadata();
 		try {
 			Sheet sheet = getSheet(fileName, stream);
@@ -59,7 +59,7 @@ public class ExcelReaderBean {
 			for (int i = 0; i < metadata.getFirstRow(); i++) {
 				row = (Row) rows.next();
 			}
-
+			int id = 1;
 			List<AccountingEntry> entries = new LinkedList<>();
 			while (rows.hasNext()) {
 				// log(row.getPhysicalNumberOfCells()+"");
@@ -89,17 +89,10 @@ public class ExcelReaderBean {
 						concept = concept
 								+ cell.getRichStringCellValue().getString()
 								+ " ";
-					}
-				}
-
-				// RUT
-				String rut = null;
-				if (metadata.getColumnRut() != null) {
-					cell = row.getCell(metadata.getColumnRut());
-					if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-						rut = cell.getRichStringCellValue().getString();
-					} else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-						rut = cell.getDateCellValue().toString();
+					}else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+						concept = concept
+								+ cell.getNumericCellValue()
+								+ " ";
 					}
 				}
 
@@ -119,34 +112,50 @@ public class ExcelReaderBean {
 					clientName = cell.getRichStringCellValue().getString();
 				}
 
-				// AMOUNT
-				double amount = 0;
-				EntryType entryType;
-				cell = row.getCell(metadata.getColumnAmount());
+				// IVA AMOUNT
+				double ivaAmount = 0;
+				cell = row.getCell(metadata.getColumnIvaAmount());
 				if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-					amount = cell.getNumericCellValue();
+					ivaAmount = cell.getNumericCellValue();
 				}
 			      
-				amount = round(amount, metadata.getDecimals());
+				ivaAmount = round(ivaAmount, metadata.getDecimals());
 				
-				if (amount < 0) {
+				// TOTAL AMOUNT
+				double totalAmount = 0;
+				EntryType entryType;
+				cell = row.getCell(metadata.getColumnTotalAmount());
+				if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+					totalAmount = cell.getNumericCellValue();
+				}
+			      
+				totalAmount = round(totalAmount, metadata.getDecimals());
+				
+				if (totalAmount < 0) {
 					entryType = EntryType.HABER;
 				} else {
 					entryType = EntryType.DEBE;
 				}
+				
 
 				AccountingEntry newEntry = new AccountingEntry();
+				newEntry.setId(id);
 				newEntry.setAccount(account);
-				newEntry.setAmount(BigDecimal.valueOf(amount));
+				newEntry.setTotalAmount(BigDecimal.valueOf(totalAmount));
+				newEntry.setIvaAmount(BigDecimal.valueOf(ivaAmount));
 				newEntry.setClientName(clientName);
 				newEntry.setConcept(concept);
 				newEntry.setCurrency(currency);
 				newEntry.setDate(date);
-				newEntry.setRut(rut);
 				newEntry.setType(entryType);
+				newEntry.setCompany(company);
+
+				BigDecimal subtotalAmount = newEntry.getTotalAmount().subtract(newEntry.getIvaAmount());
+				newEntry.setSubtotalAmount(subtotalAmount);
 
 				entries.add(newEntry);
 
+				id++;
 				row = (Row) rows.next();
 
 			}

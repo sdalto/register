@@ -4,17 +4,31 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.rilla.register.repository.constants.EntryType;
+import com.rilla.register.repository.model.Company;
 
 public class AccountingEntry {
 
+	private int id;
 	private Date date;
 	private String concept;
-	private String rut;
+	private int quipusRut;
 	private String account;
 	private String clientName;
-	private BigDecimal amount;
+	private BigDecimal subtotalAmount = BigDecimal.ZERO;
+	private BigDecimal ivaAmount = BigDecimal.ZERO;
+	private BigDecimal totalAmount = BigDecimal.ZERO;
 	private String currency;
 	private EntryType type;
+	private Date dueDate;
+	private Company company;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public Date getDate() {
 		return date;
@@ -32,12 +46,12 @@ public class AccountingEntry {
 		this.concept = concept;
 	}
 
-	public String getRut() {
-		return rut;
+	public int getQuipusRut() {
+		return quipusRut;
 	}
 
-	public void setRut(String rut) {
-		this.rut = rut;
+	public void setQuipusRut(int quipusRut) {
+		this.quipusRut = quipusRut;
 	}
 
 	public String getAccount() {
@@ -56,12 +70,28 @@ public class AccountingEntry {
 		this.clientName = clientName;
 	}
 
-	public BigDecimal getAmount() {
-		return amount;
+	public BigDecimal getSubtotalAmount() {
+		return subtotalAmount;
 	}
 
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
+	public void setSubtotalAmount(BigDecimal subtotalAmount) {
+		this.subtotalAmount = subtotalAmount;
+	}
+
+	public BigDecimal getIvaAmount() {
+		return ivaAmount;
+	}
+
+	public void setIvaAmount(BigDecimal ivaAmount) {
+		this.ivaAmount = ivaAmount;
+	}
+
+	public BigDecimal getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(BigDecimal totalAmount) {
+		this.totalAmount = totalAmount;
 	}
 
 	public String getCurrency() {
@@ -78,6 +108,22 @@ public class AccountingEntry {
 
 	public void setType(EntryType type) {
 		this.type = type;
+	}
+
+	public Date getDueDate() {
+		return dueDate;
+	}
+
+	public void setDueDate(Date dueDate) {
+		this.dueDate = dueDate;
+	}
+	
+	public Company getCompany() {
+		return company;
+	}
+	
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 }

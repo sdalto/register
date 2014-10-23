@@ -64,7 +64,18 @@
 							listener="#{homeController.onProviderItemSelect}" />
 					</p:autoComplete>
 				</p:row>
-
+				<p:row>
+					<p:outputLabel value="Empresa:" for="dd_company" />
+					<p:spacer width="10" height="10" />
+					<p:autoComplete id="dd_company"
+						value="#{homeController.selectedCompany}" dropdown="true"
+						completeMethod="#{homeController.getCompanies}" var="company"
+						itemLabel="#{company.name}" itemValue="#{company}"
+						converter="companyConverter">
+						<p:ajax event="itemSelect"
+							listener="#{homeController.onCompanyItemSelect}" />
+					</p:autoComplete>
+				</p:row>
 				<p:row>
 					<p:outputLabel for="console" value="Moneda:" />
 					<p:selectOneMenu id="console" value="#{homeController.currency}">
@@ -86,16 +97,19 @@
 					value="#{homeController.movements}" scrollable="true"
 					resizableColumns="true" update="growl" scrollHeight="250"
 					emptyMessage="Aun no se han cragado datos">
+					<p:column headerText="Nro." style="width:100px;">
+						<h:outputText value="#{movement.id}" />
+					</p:column>
 					<p:column headerText="Fecha" style="width:150px;">
 						<h:outputText value="#{movement.date}">
 							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
 						</h:outputText>
 					</p:column>
-					<p:column headerText="Concepto" style="width:300px;">
+					<p:column headerText="Leyenda" style="width:300px;">
 						<h:outputText value="#{movement.concept}" />
 					</p:column>
-					<p:column headerText="Cuenta" style="width:100px;">
-						<h:outputText value="#{movement.account}" />
+					<p:column headerText="Nro. RUT" style="width:100px;">
+						<h:outputText value="#{movement.quipusRut}" />
 					</p:column>
 					<p:column headerText="Cliente" style="width:300px;">
 						<h:outputText value="#{movement.clientName}" />
@@ -103,13 +117,25 @@
 					<p:column headerText="" style="width:20px;">
 						<h:outputText value="#{movement.currency}" />
 					</p:column>
-					<p:column headerText="Monto" style="width:100px;">
-						<h:outputText value="#{movement.amount}" style="float:right">
+					<p:column headerText="Subtotal" style="width:100px;">
+						<h:outputText value="#{movement.subtotalAmount}" style="float:right">
 							<f:convertNumber pattern="#0.00" />
 						</h:outputText>
 					</p:column>
-					<p:column headerText="RUT">
-						<h:outputText value="#{movement.rut}" />
+					<p:column headerText="Impuestos" style="width:100px;">
+						<h:outputText value="#{movement.ivaAmount}" style="float:right">
+							<f:convertNumber pattern="#0.00" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Total" style="width:100px;">
+						<h:outputText value="#{movement.totalAmount}" style="float:right">
+							<f:convertNumber pattern="#0.00" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Vencimiento" style="width:150px;">
+						<h:outputText value="#{movement.dueDate}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
 					</p:column>
 				</p:dataTable>
 

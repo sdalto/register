@@ -19,8 +19,8 @@ public class Metadata {
 	private Integer columnRut;
 	private Integer columnAccount;
 	private Integer columnClientName;
-	private Integer columnAmount;
-	private Integer columnCurrency;
+	private Integer columnTotalAmount;
+	private Integer columnIvaAmount;
 	private Integer columnEntryType;
 
 	public AmountType getAmountType() {
@@ -111,20 +111,20 @@ public class Metadata {
 		this.columnClientName = columnClientName;
 	}
 
-	public Integer getColumnAmount() {
-		return columnAmount;
+	public Integer getColumnTotalAmount() {
+		return columnTotalAmount;
 	}
-
-	public void setColumnAmount(Integer columnAmount) {
-		this.columnAmount = columnAmount;
+	
+	public void setColumnTotalAmount(Integer columnTotalAmount) {
+		this.columnTotalAmount = columnTotalAmount;
 	}
-
-	public Integer getColumnCurrency() {
-		return columnCurrency;
+	
+	public Integer getColumnIvaAmount() {
+		return columnIvaAmount;
 	}
-
-	public void setColumnCurrency(Integer columnCurrency) {
-		this.columnCurrency = columnCurrency;
+	
+	public void setColumnIvaAmount(Integer columnIvaAmount) {
+		this.columnIvaAmount = columnIvaAmount;
 	}
 
 	public Integer getColumnEntryType() {
