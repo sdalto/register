@@ -171,6 +171,22 @@ public class CompanyController {
 		this.selectedCompany = selectedCompany;
 	}
 	
+	public String getNewClientName() {
+		return newClientName;
+	}
+	
+	public void setNewClientName(String newClientName) {
+		this.newClientName = newClientName;
+	}
+	
+	public String getNewClientNumber() {
+		return newClientNumber;
+	}
+	
+	public void setNewClientNumber(String newClientNumber) {
+		this.newClientNumber = newClientNumber;
+	}
+	
 	public Client getSelectedClient() {
 		return selectedClient;
 	}

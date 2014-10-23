@@ -89,6 +89,65 @@
 						<p:rowEditor />
 					</p:column>
 				</p:dataTable>
+
+				<p:inputText id="input_client_name"
+					value="#{companyController.newClientName}" label="Nombre">
+					<!--                 <f:validateLength minimum="2" /> -->
+				</p:inputText>
+				<p:inputText id="input_client_number"
+					value="#{companyController.newClientNumber}" label="Nro.">
+					<!--                 <f:validateLength minimum="2" /> -->
+				</p:inputText>
+				<p:commandButton value="Agregar" id="bt_add_client" update="form"
+					actionListener="#{companyController.addClient}" icon="ui-icon-check">
+				</p:commandButton>
+				<p:commandButton value="Eliminar" id="bt_delete_client" update="form"
+					actionListener="#{companyController.deleteClient}" icon="ui-icon-check">
+				</p:commandButton>
+				<p:dataTable id="table_clients" var="client"
+					value="#{companyController.clients}" editable="true"
+					style="width:300px;margin-bottom:20px"
+					emptyMessage="Aun no se han cragado datos"
+					selection="#{companyController.selectedClient}"
+					rowKey="#{client.id}">
+
+					<p:ajax event="rowEdit"
+						listener="#{companyController.onClientRowEdit}"
+						update=":form:msgs" />
+					<p:ajax event="rowEditCancel"
+						listener="#{companyController.onClientRowCancel}"
+						update=":form:msgs" />
+					<p:column selectionMode="single"
+						style="width:16px;text-align:center" />
+					<p:column headerText="idCliente" style="width:300px;display: none;">
+						<h:outputText value="#{client.id}" />
+					</p:column>
+					<p:column headerText="Nombre">
+						<p:cellEditor>
+							<f:facet name="client_name_output">
+								<h:outputText value="#{client.name}" />
+							</f:facet>
+							<f:facet name="client_name_input">
+								<p:inputText id="modelInput" value="#{client.name}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="RUT">
+						<p:cellEditor>
+							<f:facet name="rut_output">
+								<h:outputText value="#{client.number}" />
+							</f:facet>
+							<f:facet name="rut_input">
+								<p:inputText id="rut_Input" value="#{client.number}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column style="width:32px">
+						<p:rowEditor />
+					</p:column>
+				</p:dataTable>
 			</p:panelGrid>
 
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">

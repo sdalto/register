@@ -9,6 +9,7 @@ public class Company implements Serializable {
 
 	private UUID id;
 	private String name;
+	private String legalName;
 	private String subtotalAccount = "1234";
 	private String ivaAccount = "4321";
 	private String totalAccount = "6789";
@@ -29,6 +30,14 @@ public class Company implements Serializable {
 		this.name = name;
 	}
 
+	public String getLegalName() {
+		return legalName;
+	}
+	
+	public void setLegalName(String legalName) {
+		this.legalName = legalName;
+	}
+	
 	public String getSubtotalAccount() {
 		return subtotalAccount;
 	}
