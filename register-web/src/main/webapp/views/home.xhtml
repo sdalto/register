@@ -49,6 +49,7 @@
 			<ui:include src="header.xhtml" height="160" />
 		</f:facet>
 		<h:form id="form" enctype="multipart/form-data">
+		<h:inputHidden  value="#{homeController.loginStatus}"/>
 			<p:growl id="growl" life="2000" />
 			
 			<p:panelGrid id="panel" columns="1">

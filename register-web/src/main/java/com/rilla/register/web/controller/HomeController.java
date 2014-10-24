@@ -106,8 +106,27 @@ public class HomeController {
 		}
 	}
 
+	public void setLoginStatus(String loginStatus) {
+
+	}
+
+	public String getLoginStatus() {
+		this.providers = Services.FACADE.providerBean.getProviders();
+		selectedProvider = providers.get(0);
+
+		this.companies = Services.FACADE.companyBean.getAll();
+		if (CollectionUtils.isNotEmpty(companies)) {
+			selectedCompany = companies.get(0);
+		}
+		return "";
+	}
+
 	public List<Provider> getProviders(String query) {
 		return providers;
+	}
+
+	public List<Company> getCompanies(String query) {
+		return companies;
 	}
 
 	public void clear(ActionEvent actionEvent) {
@@ -127,7 +146,7 @@ public class HomeController {
 
 	public void onCurrencyItemSelect(SelectEvent event) {
 	}
-	
+
 	public void onCompanyItemSelect(SelectEvent event) {
 	}
 

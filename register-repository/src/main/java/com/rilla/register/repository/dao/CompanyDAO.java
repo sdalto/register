@@ -45,6 +45,10 @@ public class CompanyDAO {
 				Company c = new Company();
 				c.setId(company.getId());
 				c.setName(company.getName());
+				c.setLegalName(company.getLegalName());
+				c.setSubtotalAccount(company.getSubtotalAccount());
+				c.setIvaAccount(company.getIvaAccount());
+				c.setTotalAccount(company.getTotalAccount());
 				result.add(c);
 			}
 			return result;
