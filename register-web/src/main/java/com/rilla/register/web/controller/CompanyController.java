@@ -21,11 +21,6 @@ public class CompanyController {
 
 	private List<Company> companies;
 	private List<Company> filteredCompanies;
-	private List<Client> clients;
-	private Company selectedCompany;
-	private String newClientName;
-	private String newClientNumber;
-	private Client selectedClient;
 
 	private String name;
 	private String legalName;
@@ -97,9 +92,8 @@ public class CompanyController {
 	    	if (company != null) {
 				Services.FACADE.companyBean.deleteCompany(company);
 				companies.remove(company);
-//				selectedCompany = new Company();
 				FacesMessage msg = new FacesMessage("Se ha eliminado la empresa",
-						selectedCompany.getName());
+						company.getName());
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
 	    } catch (Exception e) {
@@ -138,7 +132,6 @@ public class CompanyController {
 
 		Services.FACADE.companyBean.add(newCompany);
 		companies.add(newCompany);
-		selectedCompany = null;
 		name = null;
 		legalName = null;
 		subtotal = null;
@@ -151,58 +144,12 @@ public class CompanyController {
 						+ newCompany.getName()));
 	}
 
-	public void delete() {
-		if (selectedCompany != null) {
-			Services.FACADE.companyBean.deleteCompany(selectedCompany);
-			companies.remove(selectedCompany);
-			selectedCompany = new Company();
-			FacesMessage msg = new FacesMessage("Se ha eliminado la empresa",
-					selectedCompany.getName());
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-		}
-	}
-
-	public void addClient() {
-		Client newClient = new Client();
-		newClient.setName(newClientName);
-		newClient.setNumber(newClientNumber);
-		newClient.setCompanyId(selectedCompany.getId());
-
-		clients.add(newClient);
-		selectedClient = null;
-		newClientName = null;
-		newClientNumber = null;
-
-		FacesContext.getCurrentInstance().addMessage(
-				null,
-				new FacesMessage("Se ha guardado la empresa "
-						+ newClient.getName()));
-	}
-
-	public void deleteClient() {
-		// Services.FACADE.companyBean.deleteCompany(selectedCompany);
-		clients.remove(selectedClient);
-		selectedClient = new Client();
-		FacesMessage msg = new FacesMessage(
-				"Se ha cancelado la edicion del cliente",
-				selectedCompany.getName());
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-	}
-
 	public List<Company> getCompanies() {
 		return companies;
 	}
 
 	public void setCompanies(List<Company> companies) {
 		this.companies = companies;
-	}
-
-	public List<Client> getClients() {
-		return clients;
-	}
-
-	public void setClients(List<Client> clients) {
-		this.clients = clients;
 	}
 
 	public List<Company> getFilteredCompanies() {
@@ -221,35 +168,4 @@ public class CompanyController {
 		return Services.FACADE.companyBean.getAll();
 	}
 
-	public Company getSelectedCompany() {
-		return selectedCompany;
-	}
-
-	public void setSelectedCompany(Company selectedCompany) {
-		this.selectedCompany = selectedCompany;
-	}
-
-	public String getNewClientName() {
-		return newClientName;
-	}
-
-	public void setNewClientName(String newClientName) {
-		this.newClientName = newClientName;
-	}
-
-	public String getNewClientNumber() {
-		return newClientNumber;
-	}
-
-	public void setNewClientNumber(String newClientNumber) {
-		this.newClientNumber = newClientNumber;
-	}
-
-	public Client getSelectedClient() {
-		return selectedClient;
-	}
-
-	public void setSelectedClient(Client selectedClient) {
-		this.selectedClient = selectedClient;
-	}
 }
