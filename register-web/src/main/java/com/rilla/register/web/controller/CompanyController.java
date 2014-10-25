@@ -86,19 +86,24 @@ public class CompanyController {
 				((Company) event.getObject()).getId() + "");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
-	
+
 	public void remove(Company company) {
-	    try {
-	    	if (company != null) {
+		try {
+			if (company != null) {
 				Services.FACADE.companyBean.deleteCompany(company);
 				companies.remove(company);
-				FacesMessage msg = new FacesMessage("Se ha eliminado la empresa",
-						company.getName());
+				FacesMessage msg = new FacesMessage(
+						"Se ha eliminado la empresa", company.getName());
 				FacesContext.getCurrentInstance().addMessage(null, msg);
+			} else {
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN,
+								"Error", "Por favor, seleccione una empresa."));
 			}
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void onCompanyRowCancel(RowEditEvent event) {

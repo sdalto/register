@@ -1,6 +1,5 @@
 package com.rilla.register.web.controller;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -106,10 +105,6 @@ public class HomeController {
 		}
 	}
 
-	public void setLoginStatus(String loginStatus) {
-
-	}
-
 	public String getLoginStatus() {
 		this.providers = Services.FACADE.providerBean.getProviders();
 		selectedProvider = providers.get(0);
@@ -141,6 +136,7 @@ public class HomeController {
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
+	// Auxiliares
 	public void onProviderItemSelect(SelectEvent event) {
 	}
 
@@ -150,32 +146,71 @@ public class HomeController {
 	public void onCompanyItemSelect(SelectEvent event) {
 	}
 
+	public void setLoginStatus(String loginStatus) {
+
+	}
+
 	public void handleFileUpload(FileUploadEvent event) {
 		if (event.getFile().equals(null)) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"File is null", null));
+					new FacesMessage(FacesMessage.SEVERITY_WARN,
+							"Por favor seleccione un archivo", null));
 		}
 		InputStream file;
 		try {
+			fileName = null;
 			file = event.getFile().getInputstream();
-			fileName = event.getFile().getFileName();
 			movements = Services.FACADE.excelReaderBean.readFile(file,
-					selectedProvider, selectedCompany, fileName, currency);
-		} catch (IOException e) {
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Error reading file" + e, null));
+					selectedProvider, selectedCompany, event.getFile()
+							.getFileName(), currency);
+			fileName = event.getFile().getFileName();
+
+			if (CollectionUtils.isEmpty(movements)) {
+				FacesContext
+						.getCurrentInstance()
+						.addMessage(
+								null,
+								new FacesMessage(
+										FacesMessage.SEVERITY_WARN,
+										"Compruebe que el archivo sea del proveedor correcto, y que no esté vacío.",
+										null));
+			}
+		} catch (Exception e) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_ERROR,
+					"Se ha producido un error al procesar el archivo"
+							+ event.getFile().getFileName() + ".",
+					"Por favor compruebe que sea del proveedor correcto."));
 		}
 	}
 
 	public StreamedContent getDownloadFile() {
-		InputStream stream = Services.FACADE.dbfGenerator.createFile(
-				"/home/sdalto/Descargas/IMPORTA.dbf", movements);
-		return new DefaultStreamedContent(stream, "application/xls",
-				"/home/sdalto/Descargas/IMPORTA.dbf");
+		try {
+			if (CollectionUtils.isNotEmpty(movements)) {
+				InputStream stream = Services.FACADE.dbfGenerator.createFile(
+						"/home/sdalto/Descargas/IMPORTA.dbf", movements);
+				return new DefaultStreamedContent(stream, "application/xls",
+						"/home/sdalto/Descargas/IMPORTA.dbf");
+			} else {
+				FacesContext context = FacesContext.getCurrentInstance();
+				context.addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"No hay movimientos paraa descargar.",
+								"Por favor cargue los movimientos y vuelva a intentarlo."));
+			}
+		} catch (Exception e) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(
+					null,
+					new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Se ha producido un error al descaargar el archivo.",
+							"Por favor vuelva a cargar los datos en intente nuevamente."));
+		}
+		return null;
 	}
 
 }

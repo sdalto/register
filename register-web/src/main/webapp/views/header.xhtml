@@ -5,11 +5,12 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
-	
+
 <style type="text/css">
 img {
-/* 	margin-top: -20px; */
-/* 	top: 1px; */
+	/* 	margin-top: -20px; */
+	/* 	top: 1px; */
+	
 }
 </style>
 
@@ -17,13 +18,19 @@ img {
 
 <h:body>
 	<h:form id="header_form" enctype="multipart/form-data">
-		<h:graphicImage value="/resources/images/logo_completo_trans.png"
-			height="60" />
-		<p:themeSwitcher id="basic" style="float:right;width:165px">
-			<f:selectItem itemLabel="Choose Theme" itemValue="" />
-			<f:selectItems value="#{headerController.themes}" />
-		</p:themeSwitcher>
-		<!--      	<p:separator /> -->
+		<h:commandLink action="home.xhtml?faces-redirect=true">
+			<h:graphicImage value="/resources/images/logo_completo_trans.png"
+				height="60" />
+		</h:commandLink>
+		<h:panelGrid id="grid" columns="1" cellpadding="5" style="float:right;">
+			<p:themeSwitcher id="basic" style="float:right;width:165px">
+				<f:selectItem itemLabel="Choose Theme" itemValue="" />
+				<f:selectItems value="#{headerController.themes}" />
+			</p:themeSwitcher>
+
+			<p:commandButton action="company.xhtml?faces-redirect=true"
+				ajax="false" style="float:right;" icon=" ui-icon-home" />
+		</h:panelGrid>
 	</h:form>
 </h:body>
 </html>

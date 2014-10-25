@@ -48,14 +48,15 @@
 		<f:facet name="header">
 			<ui:include src="header.xhtml" height="160" />
 		</f:facet>
+
 		<h:form id="form" enctype="multipart/form-data">
-		<h:inputHidden  value="#{homeController.loginStatus}"/>
-			<p:growl id="growl" life="2000" />
-			
+			<h:inputHidden value="#{homeController.loginStatus}" />
+			<p:messages id="msgs" showDetail="true" autoUpdate="true"
+				closable="true" />
 			<p:panelGrid id="panel" columns="1">
-				<p:row>
-					<p:outputLabel value="Proveedor:" for="dd_provider" />
-					<p:spacer width="10" height="10" />
+				<h:panelGrid id="grid" columns="2" cellpadding="5">
+					<p:outputLabel value="Proveedor:" for="dd_provider"
+						style="font-weight:bold" />
 					<p:autoComplete id="dd_provider"
 						value="#{homeController.selectedProvider}" dropdown="true"
 						completeMethod="#{homeController.getProviders}" var="provider"
@@ -64,10 +65,8 @@
 						<p:ajax event="itemSelect"
 							listener="#{homeController.onProviderItemSelect}" />
 					</p:autoComplete>
-				</p:row>
-				<p:row>
-					<p:outputLabel value="Empresa:" for="dd_company" />
-					<p:spacer width="10" height="10" />
+					<p:outputLabel value="Empresa:" for="dd_company"
+						style="font-weight:bold" />
 					<p:autoComplete id="dd_company"
 						value="#{homeController.selectedCompany}" dropdown="true"
 						completeMethod="#{homeController.getCompanies}" var="company"
@@ -76,16 +75,16 @@
 						<p:ajax event="itemSelect"
 							listener="#{homeController.onCompanyItemSelect}" />
 					</p:autoComplete>
-				</p:row>
-				<p:row>
-					<p:outputLabel for="console" value="Moneda:" />
+					<p:outputLabel for="console" value="Moneda:"
+						style="font-weight:bold" />
 					<p:selectOneMenu id="console" value="#{homeController.currency}">
 						<f:selectItem itemLabel="$" itemValue="$" />
 						<f:selectItem itemLabel="US$" itemValue="US$" />
-						<p:ajax event="change" listener="#{homeController.onCurrencyItemSelect}" />
+						<p:ajax event="change"
+							listener="#{homeController.onCurrencyItemSelect}" />
 					</p:selectOneMenu>
-				</p:row>
-				
+				</h:panelGrid>
+
 				<p:row>
 					<p:fileUpload label="Seleccionar Archivo"
 						fileUploadListener="#{homeController.handleFileUpload}"
@@ -96,12 +95,12 @@
 				</p:row>
 				<p:dataTable var="movement" id="table"
 					value="#{homeController.movements}" scrollable="true"
-					resizableColumns="true" update="growl" scrollHeight="250"
+					resizableColumns="true" scrollHeight="250"
 					emptyMessage="Aun no se han cragado datos">
-					<p:column headerText="Nro." style="width:100px;">
+					<p:column headerText="Nro." style="width:30px;">
 						<h:outputText value="#{movement.id}" />
 					</p:column>
-					<p:column headerText="Fecha" style="width:150px;">
+					<p:column headerText="Fecha" style="width:100px;">
 						<h:outputText value="#{movement.date}">
 							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
 						</h:outputText>
@@ -109,7 +108,7 @@
 					<p:column headerText="Leyenda" style="width:300px;">
 						<h:outputText value="#{movement.concept}" />
 					</p:column>
-					<p:column headerText="Nro. RUT" style="width:100px;">
+					<p:column headerText="Nro. RUT" style="width:50px;">
 						<h:outputText value="#{movement.quipusRut}" />
 					</p:column>
 					<p:column headerText="Cliente" style="width:300px;">
@@ -119,7 +118,8 @@
 						<h:outputText value="#{movement.currency}" />
 					</p:column>
 					<p:column headerText="Subtotal" style="width:100px;">
-						<h:outputText value="#{movement.subtotalAmount}" style="float:right">
+						<h:outputText value="#{movement.subtotalAmount}"
+							style="float:right">
 							<f:convertNumber pattern="#0.00" />
 						</h:outputText>
 					</p:column>

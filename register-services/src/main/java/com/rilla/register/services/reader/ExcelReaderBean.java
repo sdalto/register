@@ -91,7 +91,7 @@ public class ExcelReaderBean {
 								+ " ";
 					}else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 						concept = concept
-								+ cell.getNumericCellValue()
+								+ round(cell.getNumericCellValue(),0)
 								+ " ";
 					}
 				}
