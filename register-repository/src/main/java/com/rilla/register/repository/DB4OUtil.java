@@ -6,6 +6,7 @@ import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import com.db4o.foundation.StopWatch;
+import com.rilla.register.repository.model.Client;
 import com.rilla.register.repository.model.Company;
 
 public class DB4OUtil {
@@ -78,8 +79,35 @@ public class DB4OUtil {
 			
 			Company updatedCompany = (Company) queryByExample.next();
 			updatedCompany.setName(company.getName());
+			updatedCompany.setIvaAccount(company.getIvaAccount());
+			updatedCompany.setLegalName(company.getLegalName());
+			updatedCompany.setSubtotalAccount(company.getSubtotalAccount());
+			updatedCompany.setTotalAccount(company.getTotalAccount());
 			
 			db.store(updatedCompany);
+			db.commit();
+		} catch (Throwable th) {
+			db.rollback();
+			th.printStackTrace();
+		}
+
+		watch.stop();
+		return watch.elapsed();
+	}
+	
+	public static long updateDB4OClient(Object o, ObjectContainer db, Client client) {
+		StopWatch watch = new StopWatch();
+		watch.start();
+
+		try {
+			ObjectSet<Object> queryByExample = db.queryByExample(o);
+			
+			Client updatedClient = (Client) queryByExample.next();
+			updatedClient.setCompanyId(client.getCompanyId());
+			updatedClient.setName(client.getName());
+			updatedClient.setNumber(client.getNumber());
+			
+			db.store(updatedClient);
 			db.commit();
 		} catch (Throwable th) {
 			db.rollback();

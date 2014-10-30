@@ -20,7 +20,7 @@ import com.rilla.register.web.spring.Services;
 public class CompanyController {
 
 	private List<Company> companies;
-	private List<Company> filteredCompanies;
+//	private List<Company> filteredCompanies;
 
 	private String name;
 	private String legalName;
@@ -98,8 +98,8 @@ public class CompanyController {
 			} else {
 				FacesContext.getCurrentInstance().addMessage(
 						null,
-						new FacesMessage(FacesMessage.SEVERITY_WARN,
-								"Error", "Por favor, seleccione una empresa."));
+						new FacesMessage(FacesMessage.SEVERITY_WARN, "Error",
+								"Por favor, seleccione una empresa."));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,13 +157,13 @@ public class CompanyController {
 		this.companies = companies;
 	}
 
-	public List<Company> getFilteredCompanies() {
-		return filteredCompanies;
-	}
-
-	public void setFilteredCompanies(List<Company> filteredCompanies) {
-		this.filteredCompanies = filteredCompanies;
-	}
+	// public List<Company> getFilteredCompanies() {
+	// return filteredCompanies;
+	// }
+	//
+	// public void setFilteredCompanies(List<Company> filteredCompanies) {
+	// this.filteredCompanies = filteredCompanies;
+	// }
 
 	public void addCompany(@RequestBody Company company) {
 		Services.FACADE.companyBean.add(company);

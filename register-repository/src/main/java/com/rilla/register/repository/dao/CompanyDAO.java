@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import com.db4o.ObjectContainer;
 import com.rilla.register.repository.DB4OUtil;
-import com.rilla.register.repository.model.Client;
 import com.rilla.register.repository.model.Company;
 
 @Component
