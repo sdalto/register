@@ -22,15 +22,18 @@ img {
 			<h:graphicImage value="/resources/images/logo_completo_trans.png"
 				height="60" />
 		</h:commandLink>
-		<h:panelGrid id="grid" columns="1" cellpadding="5" style="float:right;">
+		<h:panelGrid id="grid" columns="3" cellpadding="5"
+			style="float:right;">
+			<p:commandButton action="company.xhtml?faces-redirect=true"
+				ajax="false" style="float:right;" icon="ui-icon-home" />
+			<p:commandButton action="client.xhtml?faces-redirect=true"
+				ajax="false" style="float:right;" icon="ui-icon-person" />
 			<p:themeSwitcher id="basic" style="float:right;width:165px">
 				<f:selectItem itemLabel="Choose Theme" itemValue="" />
 				<f:selectItems value="#{headerController.themes}" />
 			</p:themeSwitcher>
-
-			<p:commandButton action="company.xhtml?faces-redirect=true"
-				ajax="false" style="float:right;" icon=" ui-icon-home" />
 		</h:panelGrid>
 	</h:form>
+
 </h:body>
 </html>

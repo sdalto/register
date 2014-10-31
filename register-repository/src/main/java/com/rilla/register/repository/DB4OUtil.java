@@ -136,6 +136,24 @@ public class DB4OUtil {
 		watch.stop();
 		return watch.elapsed();
 	}
+	
+	public static <T> List<T> readByExample(Object o,ObjectContainer db, Class<?> clazz) {
+		StopWatch watch = new StopWatch();
+		watch.start();
+
+		try {
+			List<T> query = db.queryByExample(o);
+			watch.stop();
+			return query;
+			
+		} catch (Throwable th) {
+			db.rollback();
+			th.printStackTrace();
+			watch.stop();
+			return null;
+		}
+
+	}
 
 	public static <T> List<T> readAll(ObjectContainer db, Class<?> clazz) {
 		StopWatch watch = new StopWatch();
@@ -144,7 +162,6 @@ public class DB4OUtil {
 			watch.start();
 
 			List<T> query = db.queryByExample(clazz);
-			System.out.println(query.size());
 			watch.stop();
 			return query;
 

@@ -91,13 +91,19 @@ public class ClientController {
 		if (CollectionUtils.isNotEmpty(companies)) {
 			company = companies.get(0);
 		}
+		if(company != null){
+			clients = Services.FACADE.clientBean.getAll(company.getId());
+		}
 		
 	}
 	
 	public String getLoginStatus() {
 		this.companies = Services.FACADE.companyBean.getAll();
-		if (CollectionUtils.isNotEmpty(companies)) {
+		if (CollectionUtils.isNotEmpty(companies) && company == null) {
 			company = companies.get(0);
+		}
+		if(company != null){
+			clients = Services.FACADE.clientBean.getAll(company.getId());
 		}
 		return "";
 	}
@@ -168,7 +174,8 @@ public class ClientController {
 	}
 
 	// Auxiliares
-	public void onCurrencyItemSelect(SelectEvent event) {
+	public void onCompanyItemSelect(SelectEvent event) {
+		clients = Services.FACADE.clientBean.getAll(company.getId());
 	}
 
 	public void setLoginStatus(String loginStatus) {

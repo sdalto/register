@@ -36,8 +36,11 @@ public class ClientDAO {
 	}
 
 	public List<Client> getAllClients(UUID companyId) {
+		Client example = new Client();
+		example.setCompanyId(companyId);
+		
 		ObjectContainer db = DB4OUtil.open();
-		List<Client> list = DB4OUtil.readAll(db, Client.class);
+		List<Client> list = DB4OUtil.readByExample(example,db, Client.class);
 		List<Client> result = new LinkedList<>();
 		if (CollectionUtils.isNotEmpty(list)) {
 			for (Client client : list) {

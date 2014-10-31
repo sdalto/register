@@ -27,6 +27,11 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
+		<managed-bean-name>clientController</managed-bean-name>
+		<managed-bean-class>com.rilla.register.web.controller.ClientController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
 		<managed-bean-name>headerController</managed-bean-name>
 		<managed-bean-class>com.rilla.register.web.controller.HeaderController</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
