@@ -1,8 +1,11 @@
 package com.rilla.register.services;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +32,17 @@ public class ClientBean {
 
 	public List<Client> getAll(UUID companyId) {
 		return clientDao.getAllClients(companyId);
+	}
+	
+	public Map<String, String> getMap(UUID companyId) {
+		List<Client> clients = clientDao.getAllClients(companyId);
+		Map<String, String> map = new HashMap<String, String>();
+		if(CollectionUtils.isNotEmpty(clients)){
+			for (Client client : clients) {
+				map.put(client.getName(), client.getNumber());
+			}
+		}		
+		return map;
 	}
 	
 	public void deleteClient(Client client) {

@@ -34,7 +34,7 @@ public class RegisterWebServer {
 	private static final String WEB_PARAMS_PATH = "conf/web-params.properties";
 	private static final int MAX_CONTENT_SIZE = 5242880; // 5 MB
 	private static final String DISPLAY_NAME = "register";
-	private static final String JSF_CONTEXT_NAME = "/register-front";
+	private static final String JSF_CONTEXT_NAME = "";
 	private static final int DEFAULT_PORT = 9010;
 
 	private final Server server;

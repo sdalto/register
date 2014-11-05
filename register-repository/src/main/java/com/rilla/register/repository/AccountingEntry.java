@@ -11,7 +11,7 @@ public class AccountingEntry {
 	private int id;
 	private Date date;
 	private String concept;
-	private int quipusRut;
+	private String quipusRut;
 	private String account;
 	private String clientName;
 	private BigDecimal subtotalAmount = BigDecimal.ZERO;
@@ -46,11 +46,11 @@ public class AccountingEntry {
 		this.concept = concept;
 	}
 
-	public int getQuipusRut() {
+	public String getQuipusRut() {
 		return quipusRut;
 	}
 
-	public void setQuipusRut(int quipusRut) {
+	public void setQuipusRut(String quipusRut) {
 		this.quipusRut = quipusRut;
 	}
 

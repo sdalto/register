@@ -151,12 +151,25 @@ public class HomeController {
 	}
 
 	public void handleFileUpload(FileUploadEvent event) {
+		if (selectedProvider == null) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_WARN,
+							"Por favor seleccione un proveedor", null));
+		}
+		if (selectedCompany == null) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_WARN,
+							"Por favor seleccione una empresa", null));
+		}
 		if (event.getFile().equals(null)) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_WARN,
 							"Por favor seleccione un archivo", null));
 		}
+
 		InputStream file;
 		try {
 			fileName = null;
@@ -191,8 +204,18 @@ public class HomeController {
 			if (CollectionUtils.isNotEmpty(movements)) {
 				InputStream stream = Services.FACADE.dbfGenerator.createFile(
 						"/home/sdalto/Descargas/IMPORTA.dbf", movements);
-				return new DefaultStreamedContent(stream, "application/xls",
-						"/home/sdalto/Descargas/IMPORTA.dbf");
+				if (stream != null) {
+					return new DefaultStreamedContent(stream,
+							"application/xls",
+							"/home/sdalto/Descargas/IMPORTA.dbf");
+				} else {
+					FacesContext context = FacesContext.getCurrentInstance();
+					context.addMessage(
+							null,
+							new FacesMessage(FacesMessage.SEVERITY_ERROR,
+									"Se ha producido un error al generar el archivo.",
+									"Por favor vuelva a cargar los movimientos e intente descargarlo."));
+				}
 			} else {
 				FacesContext context = FacesContext.getCurrentInstance();
 				context.addMessage(

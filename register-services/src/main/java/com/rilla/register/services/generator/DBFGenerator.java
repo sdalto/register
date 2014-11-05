@@ -51,13 +51,10 @@ public class DBFGenerator {
 			System.out.println("Excel written successfully..");
 			return new BufferedInputStream(new FileInputStream(path));
 		} catch (DBFException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -134,7 +131,7 @@ public class DBFGenerator {
 		rowData[10] = getNumericValue(0);
 		rowData[11] = accountingEntry.getConcept();
 		rowData[15] = accountingEntry.getCurrency();
-		rowData[17] = getNumericValue(accountingEntry.getQuipusRut());
+		rowData[17] = accountingEntry.getQuipusRut();
 		rowData[18] = getNumericValue(0);
 		rowData[19] = getNumericValue(0);
 		rowData[20] = getNumericValue(0);
@@ -242,7 +239,7 @@ public class DBFGenerator {
 		// TODO: que es?
 		fields[17] = new DBFField();
 		fields[17].setName("CL");
-		fields[17].setDataType(DBFField.FIELD_TYPE_N);
+		fields[17].setDataType(DBFField.FIELD_TYPE_C);
 		fields[17].setFieldLength(10);
 
 		// TODO: que es?

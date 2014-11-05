@@ -9,8 +9,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
@@ -18,6 +19,7 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.util.StringUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,31 +29,31 @@ import org.springframework.transaction.annotation.Transactional;
 import com.rilla.register.repository.AccountingEntry;
 import com.rilla.register.repository.constants.EntryType;
 import com.rilla.register.repository.constants.FinalFileType;
+import com.rilla.register.repository.model.Client;
 import com.rilla.register.repository.model.Company;
 import com.rilla.register.repository.model.Metadata;
 import com.rilla.register.repository.model.Provider;
-import com.rilla.register.services.CompanyBean;
-import com.rilla.register.services.ProviderBean;
+import com.rilla.register.services.ClientBean;
 
 @Service
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class ExcelReaderBean {
 
 	@Autowired
-	private ProviderBean providerBean;
-
-	@Autowired
-	private CompanyBean companyBean;
+	private ClientBean clientBean;
 
 	public List<AccountingEntry> readFile(InputStream stream,
 			Provider provider, Company company, String fileName, String currency) {
 		return read(stream, provider, fileName, currency, company);
 	}
 
+	@SuppressWarnings({ "rawtypes", "deprecation" })
 	private List<AccountingEntry> read(InputStream stream, Provider provider,
 			String fileName, String currency, Company company) {
 		Metadata metadata = provider.getMetadata();
 		try {
+			Map<String, String> clientsMap = clientBean.getMap(company.getId());
+
 			Sheet sheet = getSheet(fileName, stream);
 			Iterator rows = sheet.rowIterator();
 			Row row = (Row) rows.next();
@@ -89,12 +91,12 @@ public class ExcelReaderBean {
 						concept = concept
 								+ cell.getRichStringCellValue().getString()
 								+ " ";
-					}else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-						concept = concept
-								+ round(cell.getNumericCellValue(),0)
-								+ " ";
+					} else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+						double aux = cell.getNumericCellValue();
+						concept = concept + (int) aux + " ";
 					}
 				}
+				concept = concept.trim();
 
 				// ACCOUNT
 				String account = null;
@@ -111,6 +113,10 @@ public class ExcelReaderBean {
 				if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
 					clientName = cell.getRichStringCellValue().getString();
 				}
+				String quipusNumber = clientsMap.get(clientName);
+				if (quipusNumber == null) {
+					quipusNumber = "0";
+				}
 
 				// IVA AMOUNT
 				double ivaAmount = 0;
@@ -118,9 +124,9 @@ public class ExcelReaderBean {
 				if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 					ivaAmount = cell.getNumericCellValue();
 				}
-			      
+
 				ivaAmount = round(ivaAmount, metadata.getDecimals());
-				
+
 				// TOTAL AMOUNT
 				double totalAmount = 0;
 				EntryType entryType;
@@ -128,15 +134,14 @@ public class ExcelReaderBean {
 				if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 					totalAmount = cell.getNumericCellValue();
 				}
-			      
+
 				totalAmount = round(totalAmount, metadata.getDecimals());
-				
+
 				if (totalAmount < 0) {
 					entryType = EntryType.HABER;
 				} else {
 					entryType = EntryType.DEBE;
 				}
-				
 
 				AccountingEntry newEntry = new AccountingEntry();
 				newEntry.setId(id);
@@ -149,8 +154,10 @@ public class ExcelReaderBean {
 				newEntry.setDate(date);
 				newEntry.setType(entryType);
 				newEntry.setCompany(company);
+				newEntry.setQuipusRut(quipusNumber);
 
-				BigDecimal subtotalAmount = newEntry.getTotalAmount().subtract(newEntry.getIvaAmount());
+				BigDecimal subtotalAmount = newEntry.getTotalAmount().subtract(
+						newEntry.getIvaAmount());
 				newEntry.setSubtotalAmount(subtotalAmount);
 
 				entries.add(newEntry);
@@ -206,14 +213,15 @@ public class ExcelReaderBean {
 		ext = fileName.substring(mid + 1, fileName.length());
 		return ext;
 	}
-	
-	public static double round(double value, int places) {
-	    if (places < 0) throw new IllegalArgumentException();
 
-	    long factor = (long) Math.pow(10, places);
-	    value = value * factor;
-	    long tmp = Math.round(value);
-	    return (double) tmp / factor;
+	public static double round(double value, int places) {
+		if (places < 0)
+			throw new IllegalArgumentException();
+
+		long factor = (long) Math.pow(10, places);
+		value = value * factor;
+		long tmp = Math.round(value);
+		return (double) tmp / factor;
 	}
 
 }
